@@ -18,6 +18,5 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
-	void OSInit( void ) {}
-	void OSCleanup( void ) {}
+  
 #endif
