@@ -6,15 +6,16 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
-	void OSInit( void )
+	void OSInit(void)
 	{
 		WSADATA wsaData;
 		WSAStartup( MAKEWORD( 2, 0 ), &wsaData );
 	}
-	void OSCleanup( void )
+	void OSCleanup(void)
 	{
 		WSACleanup();
 	}
+
 #else
 	#include <sys/socket.h> //for sockaddr, socket, socket
 	#include <sys/types.h> //for size_t
@@ -26,8 +27,11 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
-	void OSInit( void ) {}
-	void OSCleanup( void ) {}
+	void OSInit(void)
+	{}
+	void OSCleanup(void)
+	{}
+
 #endif
 
 int initialization( struct sockaddr ** internet_address, socklen_t * internet_address_length );
