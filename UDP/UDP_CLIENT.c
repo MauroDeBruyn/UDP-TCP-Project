@@ -76,7 +76,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 	memset( &internet_address_setup, 0, sizeof internet_address_setup );
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
-	getaddrinfo( "192.168.0.247", "24042", &internet_address_setup, &internet_address_result );
+	getaddrinfo( "192.168.1.69", "24042", &internet_address_setup, &internet_address_result );
 
 	//Step 1.2
 	int internet_socket;
