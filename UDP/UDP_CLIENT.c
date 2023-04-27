@@ -72,7 +72,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 	memset( &internet_address_setup, 0, sizeof internet_address_setup );
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
-	getaddrinfo( "::1", "24042", &internet_address_setup, &internet_address_result );
+	getaddrinfo( "192.168.0.247", "24042", &internet_address_setup, &internet_address_result );
 
 	//Step 1.2
 	int internet_socket;
@@ -91,7 +91,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 void execution( int internet_socket, struct sockaddr * internet_address, socklen_t internet_address_length )
 {
 	//Step 2.1
-	sendto( internet_socket, "Hello UDP world!", 16, 0, internet_address, internet_address_length );
+	sendto( internet_socket, "GO", 16, 0, internet_address, internet_address_length );
 
 	//Step 2.2
 	int number_of_bytes_received = 0;
