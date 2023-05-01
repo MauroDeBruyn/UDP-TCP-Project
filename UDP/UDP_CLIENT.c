@@ -148,11 +148,10 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 			buffer[number_of_bytes_received] = '\0';
 		}
 
-		if(buffer > largest_int_received)
+		if(*buffer > *largest_int_received)
 		{
-			//printf("%s		 %s\n", buffer, largest_int_received );
-			largest_int_received == buffer;
-
+			*largest_int_received == (int)*buffer;
+			printf("%s		%s\n", buffer, largest_int_received);
 		}
 
 		else
