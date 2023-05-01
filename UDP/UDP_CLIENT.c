@@ -6,6 +6,7 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
+	#define clrscr() printf("\e[1;1H\e[2J")
 	void OSInit( void )
 	{
 		WSADATA wsaData;
@@ -33,6 +34,7 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
+	#define clrscr() printf("\e[1;1H\e[2J")
 	void OSInit(void){}
 	void OSCleanup(void){}
 
@@ -79,7 +81,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 	memset( &internet_address_setup, 0, sizeof internet_address_setup );
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
-	int getaddrinfo_return = getaddrinfo( "::1", "24042", &internet_address_setup, &internet_address_result );
+	int getaddrinfo_return = getaddrinfo( "127.0.0.1", "24044", &internet_address_setup, &internet_address_result );
 	if( getaddrinfo_return != 0 )
 	{
 		fprintf( stderr, "getaddrinfo: %s\n", gai_strerror( getaddrinfo_return ) );
@@ -148,16 +150,15 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 			buffer[number_of_bytes_received] = '\0';
 		}
 
-		if(*buffer > *largest_int_received)
+		if(buffer < largest_int_received)
 		{
-			*largest_int_received == (int)*buffer;
-			printf("%s		%s\n", buffer, largest_int_received);
-			printf("%s\n", largest_int_received);
+			strcpy(largest_int_received, buffer);
 		}
 
 		else
 		{}
 
+		clrscr();
 		printf("\rLargest int received: %s", largest_int_received);
 
 		count++;
@@ -190,14 +191,15 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 			buffer_2[number_of_bytes_received_2] = '\0';
 		}
 
-		if(buffer_2 > largest_int_received_2)
+		if(buffer < largest_int_received)
 		{
-			largest_int_received_2 == buffer_2;
+			strcpy(largest_int_received, buffer);
 		}
 
 		else
 		{}
 
+		clrscr();
 		printf("\rLargest int received: %s", largest_int_received_2);
 
 		count_2++;
