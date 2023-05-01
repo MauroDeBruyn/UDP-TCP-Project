@@ -41,6 +41,7 @@
 int initialization();
 void execution( int internet_socket );
 void cleanup( int internet_socket );
+int randInt();
 
 int main( int argc, char * argv[] )
 {
@@ -79,7 +80,7 @@ int initialization()
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
 	internet_address_setup.ai_flags = AI_PASSIVE;
-	int getaddrinfo_return = getaddrinfo( NULL, "24042", &internet_address_setup, &internet_address_result );
+	int getaddrinfo_return = getaddrinfo( NULL, "24044", &internet_address_setup, &internet_address_result );
 	if( getaddrinfo_return != 0 )
 	{
 		fprintf( stderr, "getaddrinfo: %s\n", gai_strerror( getaddrinfo_return ) );
@@ -132,24 +133,27 @@ void execution( int internet_socket )
 	struct sockaddr_storage client_internet_address;
 	socklen_t client_internet_address_length = sizeof client_internet_address;
 	number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, (struct sockaddr *) &client_internet_address, &client_internet_address_length );
-	if (buffer == "GO")
+	if( number_of_bytes_received == -1 )
 	{
-		if( number_of_bytes_received == -1 )
-		{
-			perror( "recvfrom" );
-		}
-		else
-		{
-			buffer[number_of_bytes_received] = '\0';
-			printf( "Received : %s\n", buffer );
-		}
-
+		perror( "recvfrom" );
+	}
+	else
+	{
+		buffer[number_of_bytes_received] = '\0';
+		printf( "Received : %s\n", buffer );
+	}
+	printf("1\n");
+	//sprintf(buffer, "%d", buffer);
+	if (1) //buffer == 6421244)
+	{
+		printf("2");
 		//Step 2.2
 		int number_of_bytes_send = 0;
 		for (int i = 0; i < 9; i++)
 		{
-			int randomNumber = randInt();
-			number_of_bytes_send = sendto( internet_socket, randomNumber, ( sizeof randomNumber ), 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
+			char rand_str[17];
+			sprintf(rand_str, "%016d", randInt());
+			number_of_bytes_send = sendto( internet_socket, rand_str, 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
 		}
 		if( number_of_bytes_send == -1 )
 		{
