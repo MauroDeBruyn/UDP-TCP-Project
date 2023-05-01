@@ -79,7 +79,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 	memset( &internet_address_setup, 0, sizeof internet_address_setup );
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
-	int getaddrinfo_return = getaddrinfo( "127.0.0.1", "24044", &internet_address_setup, &internet_address_result );
+	int getaddrinfo_return = getaddrinfo( "::1", "24042", &internet_address_setup, &internet_address_result );
 	if( getaddrinfo_return != 0 )
 	{
 		fprintf( stderr, "getaddrinfo: %s\n", gai_strerror( getaddrinfo_return ) );
@@ -122,7 +122,7 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 {
 	//Step 2.1
 	int number_of_bytes_send = 0;
-	number_of_bytes_send = sendto( internet_socket, "GO", 16, 0, internet_address, internet_address_length );
+	number_of_bytes_send = sendto( internet_socket, "GO", 2, 0, internet_address, internet_address_length );
 	if( number_of_bytes_send == -1 )
 	{
 		perror( "sendto" );
