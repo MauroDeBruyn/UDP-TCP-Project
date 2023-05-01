@@ -60,7 +60,6 @@ int main( int argc, char * argv[] )
 
 	execution( internet_socket, internet_address, internet_address_length );
 
-
 	////////////
 	//Clean up//
 	////////////
@@ -151,7 +150,7 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 
 		if(buffer > largest_int_received)
 		{
-			printf("%s %s\n", buffer, largest_int_received );
+			//printf("%s		 %s\n", buffer, largest_int_received );
 			largest_int_received == buffer;
 
 		}
@@ -159,7 +158,7 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 		else
 		{}
 
-		printf("The largest int received is: %s\n", largest_int_received);
+		printf("\rLargest int received: %s", largest_int_received);
 
 		count++;
 	}
@@ -168,8 +167,60 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 	number_of_bytes_send = sendto( internet_socket, largest_int_received, 16, 0, internet_address, internet_address_length );
 	if( number_of_bytes_send == -1 )
 	{
-		perror( "sendto" );
+		number_of_bytes_send = sendto( internet_socket, largest_int_received, 16, 0, internet_address, internet_address_length );
 	}
+
+	//Step 2.4
+	char largest_int_received_2[1000];
+	int number_of_bytes_received_2 = 0;
+	char buffer_2[1000];
+	int count_2 = 0;
+
+	while(count_2 < 9)
+	{
+		number_of_bytes_received_2 = recvfrom( internet_socket, buffer_2, ( sizeof buffer_2 ) - 1, 0, internet_address, &internet_address_length );
+
+		if( number_of_bytes_received_2 == -1 )
+		{
+			perror( "recvfrom" );
+		}
+
+		else
+		{
+			buffer_2[number_of_bytes_received_2] = '\0';
+		}
+
+		if(buffer_2 > largest_int_received_2)
+		{
+			printf("%s		 %s\n", buffer, largest_int_received_2 );
+			largest_int_received_2 == buffer_2;
+
+		}
+
+		else
+		{}
+
+		printf("\rLargest int received: %s", largest_int_received_2);
+
+		count_2++;
+	}
+
+	//Step 2.5
+	number_of_bytes_send = sendto( internet_socket, largest_int_received_2, 16, 0, internet_address, internet_address_length );
+	if( number_of_bytes_send == -1 )
+	{
+		number_of_bytes_send = sendto( internet_socket, largest_int_received_2, 16, 0, internet_address, internet_address_length );
+	}
+
+	char respons[3];
+
+	number_of_bytes_received_2 = recvfrom( internet_socket, respons, ( sizeof respons ) - 1, 0, internet_address, &internet_address_length );
+
+	if( number_of_bytes_received_2 == -1 )
+	{
+		perror( "recvfrom" );
+	}
+	printf("\nServer respons: %s", respons);
 }
 
 void cleanup( int internet_socket, struct sockaddr * internet_address )
