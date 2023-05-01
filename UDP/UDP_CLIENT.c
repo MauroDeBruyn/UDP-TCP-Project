@@ -191,9 +191,7 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 
 		if(buffer_2 > largest_int_received_2)
 		{
-			printf("%s		 %s\n", buffer, largest_int_received_2 );
 			largest_int_received_2 == buffer_2;
-
 		}
 
 		else
