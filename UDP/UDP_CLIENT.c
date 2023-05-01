@@ -191,9 +191,9 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 			buffer_2[number_of_bytes_received_2] = '\0';
 		}
 
-		if(buffer < largest_int_received)
+		if(buffer_2 < largest_int_received_2)
 		{
-			strcpy(largest_int_received, buffer);
+			strcpy(largest_int_received_2, buffer_2);
 		}
 
 		else
