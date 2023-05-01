@@ -130,7 +130,7 @@ void execution( int internet_socket )
 	struct sockaddr_storage client_internet_address;
 	socklen_t client_internet_address_length = sizeof client_internet_address;
 	number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, (struct sockaddr *) &client_internet_address, &client_internet_address_length );
-	if (number_of_bytes_received == "GO")
+	if (buffer == "GO")
 	{
 		if( number_of_bytes_received == -1 )
 		{
@@ -144,7 +144,7 @@ void execution( int internet_socket )
 
 		//Step 2.2
 		int number_of_bytes_send = 0;
-		number_of_bytes_send = sendto( internet_socket, "Hello UDP world!", 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
+		number_of_bytes_send = sendto( internet_socket, "Hello client!", 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
 		if( number_of_bytes_send == -1 )
 		{
 			perror( "sendto" );
