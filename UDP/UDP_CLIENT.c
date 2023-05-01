@@ -6,7 +6,7 @@
 	#include <unistd.h> //for close
 	#include <stdlib.h> //for exit
 	#include <string.h> //for memset
-	void OSInit(void)
+	void OSInit( void )
 	{
 		WSADATA wsaData;
 		int WSAError = WSAStartup( MAKEWORD( 2, 0 ), &wsaData );
@@ -16,7 +16,7 @@
 			exit( -1 );
 		}
 	}
-	void OSCleanup(void)
+	void OSCleanup( void )
 	{
 		WSACleanup();
 	}
@@ -80,7 +80,7 @@ int initialization( struct sockaddr ** internet_address, socklen_t * internet_ad
 	memset( &internet_address_setup, 0, sizeof internet_address_setup );
 	internet_address_setup.ai_family = AF_UNSPEC;
 	internet_address_setup.ai_socktype = SOCK_DGRAM;
-	int getaddrinfo_return = getaddrinfo( "::1", "24042", &internet_address_setup, &internet_address_result );
+	int getaddrinfo_return = getaddrinfo( "127.0.0.1", "24044", &internet_address_setup, &internet_address_result );
 	if( getaddrinfo_return != 0 )
 	{
 		fprintf( stderr, "getaddrinfo: %s\n", gai_strerror( getaddrinfo_return ) );
@@ -123,24 +123,52 @@ void execution( int internet_socket, struct sockaddr * internet_address, socklen
 {
 	//Step 2.1
 	int number_of_bytes_send = 0;
-	number_of_bytes_send = sendto( internet_socket, "Hello UDP world!", 16, 0, internet_address, internet_address_length );
+	number_of_bytes_send = sendto( internet_socket, "GO", 16, 0, internet_address, internet_address_length );
 	if( number_of_bytes_send == -1 )
 	{
 		perror( "sendto" );
 	}
 
 	//Step 2.2
+	char largest_int_received[1000];
 	int number_of_bytes_received = 0;
 	char buffer[1000];
-	number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, internet_address, &internet_address_length );
-	if( number_of_bytes_received == -1 )
+	int count = 0;
+
+	while(count < 9)
 	{
-		perror( "recvfrom" );
+		number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, internet_address, &internet_address_length );
+
+		if( number_of_bytes_received == -1 )
+		{
+			perror( "recvfrom" );
+		}
+
+		else
+		{
+			buffer[number_of_bytes_received] = '\0';
+		}
+
+		if(buffer > largest_int_received)
+		{
+			printf("%s %s\n", buffer, largest_int_received );
+			largest_int_received == buffer;
+
+		}
+
+		else
+		{}
+
+		printf("The largest int received is: %s\n", largest_int_received);
+
+		count++;
 	}
-	else
+
+	//Step 2.3
+	number_of_bytes_send = sendto( internet_socket, largest_int_received, 16, 0, internet_address, internet_address_length );
+	if( number_of_bytes_send == -1 )
 	{
-		buffer[number_of_bytes_received] = '\0';
-		printf( "Received : %s\n", buffer );
+		perror( "sendto" );
 	}
 }
 
