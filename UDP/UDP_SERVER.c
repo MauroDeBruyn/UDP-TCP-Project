@@ -36,6 +36,8 @@
 	int OSCleanup( void ) {}
 #endif
 
+#include <time.h>
+
 int initialization();
 void execution( int internet_socket );
 void cleanup( int internet_socket );
@@ -144,12 +146,25 @@ void execution( int internet_socket )
 
 		//Step 2.2
 		int number_of_bytes_send = 0;
-		number_of_bytes_send = sendto( internet_socket, "Hello client!", 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
+		for (int i = 0; i < 9; i++)
+		{
+			int randomNumber = randInt();
+			number_of_bytes_send = sendto( internet_socket, randomNumber, ( sizeof randomNumber ), 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
+		}
 		if( number_of_bytes_send == -1 )
 		{
 			perror( "sendto" );
 		}
 	}
+}
+
+int randInt()
+{
+	srand(time(0));
+
+	int random = rand() % 999 + 1;
+
+	return random;
 }
 
 void cleanup( int internet_socket )
