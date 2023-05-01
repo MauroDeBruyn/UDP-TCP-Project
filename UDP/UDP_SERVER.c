@@ -43,7 +43,6 @@
 int initialization();
 void execution( int internet_socket );
 void cleanup( int internet_socket );
-int randInt();
 
 int main( int argc, char * argv[] )
 {
@@ -144,16 +143,13 @@ void execution( int internet_socket )
 		buffer[number_of_bytes_received] = '\0';
 		printf( "Received : %s\n", buffer );
 	}
-	printf("1\n");
 	//sprintf(buffer, "%d", buffer);
 	if (1) //buffer == 6421244)
 	{
-		printf("2\n");
-		//Step 2.2
+		//Step 2.2 (first set of random integers)
 		int number_of_bytes_send = 0;
 		int i, random;
 		srand(time(NULL));
-
 		for (int i = 0; i < 9; i++)
 		{
       random = rand() % 100 + 1;
@@ -167,18 +163,47 @@ void execution( int internet_socket )
 		{
 			perror( "sendto" );
 		}
+
+		number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, (struct sockaddr *) &client_internet_address, &client_internet_address_length );
+		if( number_of_bytes_received == -1 )
+		{
+			perror( "recvfrom" );
+		}
+		else
+		{
+			buffer[number_of_bytes_received] = '\0';
+			printf( "Received : %s\n", buffer );
+		}
+
+		//Step 2.3 (Second set of random integers)
+		for (int i = 0; i < 9; i++)
+		{
+      random = rand() % 100 + 1;
+      printf("%d\n", random);
+
+			char rand_str[17];
+			sprintf(rand_str, "%016d", random);
+			number_of_bytes_send = sendto( internet_socket, rand_str, 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
+		}
+		if( number_of_bytes_send == -1 )
+		{
+			perror( "sendto" );
+		}
+
+		number_of_bytes_received = recvfrom( internet_socket, buffer, ( sizeof buffer ) - 1, 0, (struct sockaddr *) &client_internet_address, &client_internet_address_length );
+		if( number_of_bytes_received == -1 )
+		{
+			perror( "recvfrom" );
+		}
+		else
+		{
+			buffer[number_of_bytes_received] = '\0';
+			printf( "Received : %s\n", buffer );
+		}
+
+		//Step 2.4 (Respond to stop connection)
+		number_of_bytes_send = sendto( internet_socket, "OK", 16, 0, (struct sockaddr *) &client_internet_address, client_internet_address_length );
 	}
-}
-
-int randInt()
-{
-	srand(time(0));
-
-	int random = rand() % 999 + 1;
-
-	printf("%d\n", random);
-
-	return random;
 }
 
 void cleanup( int internet_socket )
